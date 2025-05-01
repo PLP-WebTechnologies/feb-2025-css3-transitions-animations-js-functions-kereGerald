@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS3 & JavaScript Demo</title>
+    <style>
+        /* CSS Styles */
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --box-color: #ea4335;
+            --button-bg: #f1f1f1;
+            --button-hover: #e0e0e0;
+        }
+
+        .dark-mode {
+            --primary-color: #8ab4f8;
+            --secondary-color: #81c995;
+            --bg-color: #121212;
+            --text-color: #f1f1f1;
+            --box-color: #f28b82;
+            --button-bg: #333333;
+            --button-hover: #555555;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+        }
+
+        .theme-toggle {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        .animation-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 5px;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .box {
+            width: 200px;
+            height: 200px;
+            background-color: var(--box-color);
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-50px); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(100px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes colorChange {
+            0% { background-color: var(--box-color); }
+            25% { background-color: #4285f4; }
+            50% { background-color: #34a853; }
+            75% { background-color: #fbbc05; }
+            100% { background-color: var(--box-color); }
+        }
+
+        .bounce {
+            animation: bounce 1s ease infinite;
+        }
+
+        .rotate {
+            animation: rotate 2s linear infinite;
+        }
+
+        .slide {
+            animation: slide 1.5s ease-in-out infinite;
+        }
+
+        .color-change {
+            animation: colorChange 3s linear infinite;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--primary-color);
+            color: var(--secondary-color);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .box {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .theme-toggle {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .theme-toggle button {
+                width: 100%;
+            }
+            
+            .box {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Interactive Webpage</h1>
+            <div class="theme-toggle">
+                <button id="themeBtn">Toggle Dark Mode</button>
+                <button id="savePrefBtn">Save Preferences</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="controls">
+                <button id="animateBtn">Animate Box</button>
+                <button id="resetBtn">Reset Animation</button>
+                <div class="animation-options">
+                    <label for="animationType">Choose Animation:</label>
+                    <select id="animationType">
+                        <option value="bounce">Bounce</option>
+                        <option value="rotate">Rotate</option>
+                        <option value="slide">Slide</option>
+                        <option value="colorChange">Color Change</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="animatedBox" class="box"></div>
+        </main>
+
+        <footer>
+            <p>Hover over buttons for transition effects</p>
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript Code
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const themeBtn = document.getElementById('themeBtn');
+            const savePrefBtn = document.getElementById('savePrefBtn');
+            const animateBtn = document.getElementById('animateBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const animationType = document.getElementById('animationType');
+            const animatedBox = document.getElementById('animatedBox');
+            const body = document.body;
+
+            // Load saved preferences
+            loadPreferences();
+
+            // Event Listeners
+            themeBtn.addEventListener('click', toggleTheme);
+            savePrefBtn.addEventListener('click', savePreferences);
+            animateBtn.addEventListener('click', startAnimation);
+            resetBtn.addEventListener('click', resetAnimation);
+
+            // Functions
+            function toggleTheme() {
+                body.classList.toggle('dark-mode');
+                // Update button text based on current theme
+                if (body.classList.contains('dark-mode')) {
+                    themeBtn.textContent = 'Toggle Light Mode';
+                } else {
+                    themeBtn.textContent = 'Toggle Dark Mode';
+                }
+            }
+
+            function savePreferences() {
+                const preferences = {
+                    darkMode: body.classList.contains('dark-mode'),
+                    animation: animationType.value
+                };
+                localStorage.setItem('userPreferences', JSON.stringify(preferences));
+                alert('Preferences saved! They will be applied on your next visit.');
+            }
+
+            function loadPreferences() {
+                const savedPreferences = localStorage.getItem('userPreferences');
+                if (savedPreferences) {
+                    const preferences = JSON.parse(savedPreferences);
+                    
+                    // Apply theme preference
+                    if (preferences.darkMode) {
+                        body.classList.add('dark-mode');
+                        themeBtn.textContent = 'Toggle Light Mode';
+                    }
+                    
+                    // Set animation type dropdown
+                    if (preferences.animation) {
+                        animationType.value = preferences.animation;
+                    }
+                }
+            }
+
+            function startAnimation() {
+                // First remove any existing animation classes
+                resetAnimation();
+                
+                // Get selected animation type
+                const selectedAnimation = animationType.value;
+                
+                // Add appropriate animation class
+                switch(selectedAnimation) {
+                    case 'bounce':
+                        animatedBox.classList.add('bounce');
+                        break;
+                    case 'rotate':
+                        animatedBox.classList.add('rotate');
+                        break;
+                    case 'slide':
+                        animatedBox.classList.add('slide');
+                        break;
+                    case 'colorChange':
+                        animatedBox.classList.add('color-change');
+                        break;
+                    default:
+                        animatedBox.classList.add('bounce');
+                }
+            }
+
+            function resetAnimation() {
+                // Remove all animation classes
+                animatedBox.classList.remove('bounce', 'rotate', 'slide', 'color-change');
+            }
+        });
+    </script>
+</body>
+</html>
